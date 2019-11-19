@@ -1,0 +1,9 @@
+# IDEA Specific
+.idea
+course-project.iml
+
+# Selenide
+build/
+
+# Maven
+target/
