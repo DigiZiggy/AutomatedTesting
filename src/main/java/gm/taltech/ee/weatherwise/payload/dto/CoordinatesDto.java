@@ -1,4 +1,4 @@
-package gm.taltech.ee.weatherwise.api.dto;
+package gm.taltech.ee.weatherwise.payload.dto;
 
 import lombok.Data;
 

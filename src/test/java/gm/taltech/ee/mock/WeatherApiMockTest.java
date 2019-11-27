@@ -1,10 +1,11 @@
-package gm.taltech.ee.examples.mock;
+package gm.taltech.ee.mock;
 
+import com.sun.jersey.api.client.ClientResponse;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
-import gm.taltech.ee.weatherwise.api.response.CurrentWeatherData;
 import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
+import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public class WeatherApiMockTest {
     @Test
     public void should_not_call_api_when_city_is_empty() throws CurrentWeatherDataMissingException {
         try {
-            weatherWise.getWeatherReportForCity(null);
+            weatherWise.getWeatherReportForCityInCertainUnits(null, null);
         } catch (CityIsEmptyException e) {
             // ignored
         }
@@ -47,15 +48,26 @@ public class WeatherApiMockTest {
     @Test
     public void should_call_api_when_city_name_is_provided() throws CurrentWeatherDataMissingException {
         String city = "Tallinn";
-        when(weatherApiMock.getCurrentWeatherDataForCity(anyString()))
-                .thenReturn(mock(CurrentWeatherData.class));
+        String units = String.valueOf((Object) null);
+
+        when(weatherApiMock.getCurrentWeatherDataForCity(anyString(), anyString()))
+                .thenReturn(mock(CurrentWeatherResponse.class));
 
         try {
-            weatherWise.getWeatherReportForCity(city);
+            weatherWise.getWeatherReportForCityInCertainUnits(city, null);
         } catch (CityIsEmptyException e) {
             // ignored
         }
 
-        verify(weatherApiMock).getCurrentWeatherDataForCity(city);
+        verify(weatherApiMock).getCurrentWeatherDataForCity(city, units);
+    }
+
+    @Test
+    public void should_return_exception_when_city_unknown() {
+        String city = "chjv";
+        String units = String.valueOf((Object) null);
+
+//        ClientResponse response = weatherApi.getWeatherForecastClientResponse(city, units);
+//        System.out.println(response.getStatus());
     }
 }

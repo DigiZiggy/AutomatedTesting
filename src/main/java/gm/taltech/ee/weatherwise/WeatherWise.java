@@ -1,9 +1,9 @@
 package gm.taltech.ee.weatherwise;
 
 import gm.taltech.ee.weatherwise.api.WeatherApi;
-import gm.taltech.ee.weatherwise.api.response.CurrentWeatherData;
 import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
+import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 
 public class WeatherWise {
 
@@ -13,16 +13,18 @@ public class WeatherWise {
         this.weatherApi = weatherApi;
     }
 
-    public WeatherReport getWeatherReportForCity(String city) throws CityIsEmptyException, CurrentWeatherDataMissingException {
+    public WeatherReport getWeatherReportForCityInCertainUnits(String city, String units) throws CityIsEmptyException, CurrentWeatherDataMissingException {
         WeatherReport weatherReport = new WeatherReport();
         WeatherReportDetails weatherReportDetails = new WeatherReportDetails();
 
         if (isCityMissing(city)) {
             throw new CityIsEmptyException("City is empty");
         } else {
-            CurrentWeatherData currentWeatherData = weatherApi.getCurrentWeatherDataForCity(city);
+            CurrentWeatherResponse currentWeatherData = weatherApi.getCurrentWeatherDataForCity(city, units);
+
             if (currentWeatherData != null) {
                 weatherReportDetails.setCity(currentWeatherData.getName());
+                weatherReportDetails.setTemperatureUnit(units);
                 weatherReport.setWeatherReportDetails(weatherReportDetails);
                 return weatherReport;
             } else {
