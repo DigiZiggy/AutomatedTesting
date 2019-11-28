@@ -3,12 +3,15 @@ package gm.taltech.ee.integration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
+import gm.taltech.ee.weatherwise.Forecast;
 import gm.taltech.ee.weatherwise.Helper;
 import gm.taltech.ee.weatherwise.WeatherReport;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
 import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
+import gm.taltech.ee.weatherwise.payload.dto.ForecastDto;
+import gm.taltech.ee.weatherwise.payload.dto.MainDto;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
 import org.checkerframework.common.value.qual.StringVal;
@@ -21,6 +24,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -50,7 +54,7 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void returns_current_weather_for_given_city() {
+    public void should_return_current_weather_for_given_city() {
         String city = "Tallinn";
         String units = String.valueOf((Object) null);
 
@@ -84,7 +88,7 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void returns_5_days_forecast_data_for_city() throws IOException {
+    public void should_return_5_days_forecast_data_for_city() throws IOException {
         String city = "Barcelona";
         String units = String.valueOf((Object) null);
 
@@ -107,7 +111,7 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void returns_message_city_not_found_when_city_unknown() {
+    public void should_return_message_city_not_found_when_city_unknown() {
         String city = "trgy";
         String units = String.valueOf((Object) null);
         String city_not_found_message = "city not found";
@@ -117,17 +121,29 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void returns_forecast_that_is_not_older_than_3hours() {
+    public void should_return_forecast_that_is_not_older_than_3hours() {
         //     tagastatakse mitte vanem kui 3h vana ilmaennustus
     }
 
     @Test
-    public void returns_correct_coordinates_for_the_city() {
+    public void should_return_correct_coordinates_for_the_city() {
         //    tagastatakse õige linna koordinaadid
     }
 
     @Test
-    public void returns_coordinates_in_correct_form() {
+    public void should_return_coordinates_in_correct_form() {
         //     Koordinaadid kujul lat,lon, nt "59.44,24.75"
+    }
+
+    @Test
+    public void should_return_forecast_with_temperature_data() throws IOException {
+        // forecast-i response-is on olemas temperatuuri (või niiskuse, õhurõhu) andmed
+        String city = "Rome";
+        String units = String.valueOf((Object) null);
+
+        WeatherForecastResponse weatherForecastData = weatherApi.getWeatherForecastDataForCity(city, units);
+        List<ForecastDto> forecast = weatherForecastData.getList();
+
+        System.out.println(weatherForecastData.getList().getClass());
     }
 }

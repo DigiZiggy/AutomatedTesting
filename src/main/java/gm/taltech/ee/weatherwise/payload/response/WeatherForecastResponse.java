@@ -19,5 +19,6 @@ public class WeatherForecastResponse {
     private Integer cnt;
     private List<ForecastDto> list;
     private CityDto city;
+
 }
 

@@ -4,13 +4,17 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import gm.taltech.ee.weatherwise.payload.dto.ForecastDto;
+import gm.taltech.ee.weatherwise.payload.dto.WeatherDto;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.CollectionLikeType;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.sun.jersey.api.client.Client.create;
 import static com.sun.jersey.api.json.JSONConfiguration.FEATURE_POJO_MAPPING;

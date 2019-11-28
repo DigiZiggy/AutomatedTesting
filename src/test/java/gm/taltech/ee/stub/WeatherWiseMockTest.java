@@ -31,7 +31,7 @@ public class WeatherWiseMockTest {
     }
 
     @Test
-    public void returns_weather_report_for_given_city() throws CityIsEmptyException, CurrentWeatherDataMissingException {
+    public void should_return_weather_report_for_given_city() throws CityIsEmptyException, CurrentWeatherDataMissingException {
         String city = "Tallinn";
         CurrentWeatherResponse currentWeatherData = new CurrentWeatherResponse();
         currentWeatherData.setName(city);
