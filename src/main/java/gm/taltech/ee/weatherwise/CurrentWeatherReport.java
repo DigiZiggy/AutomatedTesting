@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CurrentWeatherReport {
-    private Integer temperature;
+    private Double temperature;
     private Integer humidity;
     private Integer pressure;
 

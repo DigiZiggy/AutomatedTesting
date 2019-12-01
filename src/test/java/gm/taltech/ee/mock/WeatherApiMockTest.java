@@ -5,12 +5,15 @@ import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
 import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
+import gm.taltech.ee.weatherwise.payload.dto.CoordinatesDto;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
@@ -37,7 +40,7 @@ public class WeatherApiMockTest {
     public void should_not_call_api_when_city_is_empty() throws CurrentWeatherDataMissingException {
         try {
             weatherWise.getWeatherReportForCityInCertainUnits(null, null);
-        } catch (CityIsEmptyException e) {
+        } catch (CityIsEmptyException | IOException e) {
             // ignored
         }
 
@@ -54,20 +57,10 @@ public class WeatherApiMockTest {
                 .thenReturn(mock(CurrentWeatherResponse.class));
 
         try {
-            weatherWise.getWeatherReportForCityInCertainUnits(city, null);
-        } catch (CityIsEmptyException e) {
+            weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        } catch (CityIsEmptyException | IOException e) {
             // ignored
         }
-
         verify(weatherApiMock).getCurrentWeatherDataForCity(city, units);
-    }
-
-    @Test
-    public void should_return_exception_when_city_unknown() {
-        String city = "chjv";
-        String units = String.valueOf((Object) null);
-
-//        ClientResponse response = weatherApi.getWeatherForecastClientResponse(city, units);
-//        System.out.println(response.getStatus());
     }
 }

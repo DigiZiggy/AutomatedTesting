@@ -1,45 +1,29 @@
 package gm.taltech.ee.integration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
-import gm.taltech.ee.weatherwise.Forecast;
-import gm.taltech.ee.weatherwise.Helper;
-import gm.taltech.ee.weatherwise.WeatherReport;
+import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
+import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
-import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
-import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
 import gm.taltech.ee.weatherwise.payload.dto.ForecastDto;
-import gm.taltech.ee.weatherwise.payload.dto.MainDto;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
-import org.checkerframework.common.value.qual.StringVal;
-import org.hamcrest.Matcher;
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 public class WeatherApiTest {
-
-    @Mock
-    WeatherApi weatherApiMock;
 
     private WeatherWise weatherWise;
     private WeatherApi weatherApi;
@@ -48,8 +32,8 @@ public class WeatherApiTest {
 
     @Before
     public void setUp() {
-        weatherWise = new WeatherWise(weatherApiMock);
         weatherApi = new WeatherApi();
+        weatherWise = new WeatherWise(weatherApi);
         helper = new Helper();
     }
 
@@ -58,9 +42,9 @@ public class WeatherApiTest {
         String city = "Tallinn";
         String units = String.valueOf((Object) null);
 
-        CurrentWeatherResponse response = weatherApi.getCurrentWeatherDataForCity(city, units);
+        CurrentWeatherResponse currentWeatherData = weatherApi.getCurrentWeatherDataForCity(city, units);
 
-        long responseUnixTime = response.getDt();
+        long responseUnixTime = currentWeatherData.getDt();
         long currentUnixTime = System.currentTimeMillis() / 1000L;
 
         long roundedResponseUnixTime = helper.round_unix_timestamp_to_nearest_hour(responseUnixTime);
@@ -123,16 +107,19 @@ public class WeatherApiTest {
     @Test
     public void should_return_forecast_that_is_not_older_than_3hours() {
         //     tagastatakse mitte vanem kui 3h vana ilmaennustus
+        throw new NotImplementedException("Test not implemented!");
     }
 
     @Test
     public void should_return_correct_coordinates_for_the_city() {
         //    tagastatakse õige linna koordinaadid
+        throw new NotImplementedException("Test not implemented!");
     }
 
     @Test
     public void should_return_coordinates_in_correct_form() {
         //     Koordinaadid kujul lat,lon, nt "59.44,24.75"
+        throw new NotImplementedException("Test not implemented!");
     }
 
     @Test
@@ -144,6 +131,7 @@ public class WeatherApiTest {
         WeatherForecastResponse weatherForecastData = weatherApi.getWeatherForecastDataForCity(city, units);
         List<ForecastDto> forecast = weatherForecastData.getList();
 
-        System.out.println(weatherForecastData.getList().getClass());
+        System.out.println(weatherForecastData.getList());
+        throw new NotImplementedException("Test not implemented!");
     }
 }

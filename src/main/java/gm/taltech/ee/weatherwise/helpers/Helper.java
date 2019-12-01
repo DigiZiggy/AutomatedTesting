@@ -1,4 +1,4 @@
-package gm.taltech.ee.weatherwise;
+package gm.taltech.ee.weatherwise.helpers;
 
 public class Helper {
 

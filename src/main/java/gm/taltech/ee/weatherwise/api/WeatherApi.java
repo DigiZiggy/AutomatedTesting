@@ -34,12 +34,13 @@ public class WeatherApi {
     }
 
     public WeatherForecastResponse getWeatherForecastDataForCity(String cityName, String units) throws IOException {
-        ClientResponse response = getWeatherForecastClientResponse(cityName, units);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        String json = response.getEntity(String.class);
-
-        return mapper.readValue(json, WeatherForecastResponse.class);
+//        ClientResponse response = getWeatherForecastClientResponse(cityName, units);
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//        String json = response.getEntity(String.class);
+//
+//        return mapper.readValue(json, WeatherForecastResponse.class);
+        return getWeatherForecastClientResponse(cityName, units).getEntity(WeatherForecastResponse.class);
     }
 
     public ClientResponse getCurrentWeatherClientResponse(String cityName, String units) {
