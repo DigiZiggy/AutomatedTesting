@@ -1,26 +1,22 @@
 package gm.taltech.ee.page_object;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
-import java.util.Set;
 
 public class HomePage {
     private WebDriver driver;
-    private By header = By.tagName("header");
-    private By title = By.cssSelector("div#u1766");
-    private By enterOISDropdownLink = By.partialLinkText("ÕIS");
-    private By enterIntranetDropdownLink = By.partialLinkText("Siseveeb");
-    private By enterMoodleDropdownLink = By.partialLinkText("Moodle");
     private By mainLogo = By.className("main-logo");
     private By goToStudentPageLink = By.linkText("Tudeng");
     private By goToEmployeeSearchLink = By.linkText("Otsi töötajat");
 
+    private Actions builder;
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
+        builder = new Actions(driver);
     }
 
     public boolean isAt() {
@@ -36,36 +32,22 @@ public class HomePage {
     }
 
     public void clickGoToOISPageDropdownLink() {
-        driver.findElement(enterOISDropdownLink).click();
+        WebElement clickElement = driver.findElement(By.xpath("//*[@id=\"dropdownHeader\"]/div/div[3]/ul/li/ul/li[1]/a"));
+        builder.moveToElement(clickElement).click().perform();
     }
 
     public void clickGoToMoodlePageDropdownLink() {
-        driver.findElement(enterMoodleDropdownLink).click();
+        WebElement clickElement = driver.findElement(By.xpath("//*[@id=\"dropdownHeader\"]/div/div[3]/ul/li/ul/li[2]/a"));
+        builder.moveToElement(clickElement).click().perform();
     }
 
     public void clickGoToIntranetPageDropdownLink() {
-        driver.findElement(enterIntranetDropdownLink).click();
+        WebElement clickElement = driver.findElement(By.xpath("//*[@id=\"dropdownHeader\"]/div/div[3]/ul/li/ul/li[3]/a"));
+        builder.moveToElement(clickElement).click().perform();
     }
 
-    public void goToSecondWindowOpened() {
-        String firstPageWindowHandle;
-        String secondPageWindowHandle = null;
-        firstPageWindowHandle = driver.getWindowHandle();
-
-        // Store both window handles
-        Set<String> testPageWindowHandle = driver.getWindowHandles();
-
-        for (String windowHandle : testPageWindowHandle) {
-            if (!firstPageWindowHandle.equals(windowHandle)) {
-                secondPageWindowHandle = windowHandle;
-            }
-        }
-
-        driver.switchTo().window(secondPageWindowHandle);
-    }
-
-    public void waitForLoad(WebDriver driver) {
-        new WebDriverWait(driver, 30).until((ExpectedCondition<Boolean>) wd ->
-                ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+    public void hoverOnEnterIntoDropdown() {
+        WebElement hoverElement = driver.findElement(By.cssSelector("div[class='login languages']"));
+        builder.moveToElement(hoverElement).perform();
     }
 }

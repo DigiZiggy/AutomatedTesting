@@ -1,6 +1,5 @@
 package gm.taltech.ee.unit;
 
-import com.sun.jersey.api.client.ClientResponse;
 import gm.taltech.ee.weatherwise.ForecastReport;
 import gm.taltech.ee.weatherwise.WeatherReport;
 import gm.taltech.ee.weatherwise.WeatherReportDetails;
@@ -8,13 +7,9 @@ import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
 import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
-import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
-import org.apache.commons.lang3.NotImplementedException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.hamcrest.core.IsNull;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,9 +17,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,22 +29,17 @@ public class WeatherWiseUnitTest {
 
     private WeatherWise weatherWise;
     private WeatherApi weatherApi;
-    private Helper helper;
-    private ObjectMapper mapper;
-
 
     @Before
     public void setUp() {
         weatherApi = new WeatherApi();
         weatherWise = new WeatherWise(weatherApi);
-        helper = new Helper();
-        mapper = new ObjectMapper();
     }
 
     @Test
     public void read_from_file_should_return_list_of_cities() throws IOException {
 
-        List<String> expectedOutput = new ArrayList<String>(Arrays.asList("Moscow", "London", "Saint Petersburg",
+        List<String> expectedOutput = new ArrayList<>(Arrays.asList("Moscow", "London", "Saint Petersburg",
                 "Berlin", "Madrid", "Kyiv", "Rome", "Paris", "Bucharest", "Minsk", "Budapest", "Hamburg", "Warsaw",
                 "Vienna", "Barcelona", "Stockholm", "Kharkiv", "Novosibirsk", "Yekaterinburg", "Nizhniy Novgorod",
                 "Belgrade", "Munich", "Milan", "Prague", "Copenhagen", "Sofia", "Samara", "Omsk", "Kazan",
@@ -133,6 +120,6 @@ public class WeatherWiseUnitTest {
         String city = "";
         String units = String.valueOf((Object) null);
 
-        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        weatherWise.getWeatherReportForCityInCertainUnits(city, units);
     }
 }

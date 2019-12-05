@@ -61,10 +61,8 @@ public class TalTechHomepageTest {
     public void should_be_able_to_navigate_to_OIS_page_from_homepage() {
         OISpage oisPage = new OISpage(driver);
 
-        homePage.clickGoToOISPageDropdownLink();  //OPENS WRONG LINK ON PAGE
-        driver.navigate().refresh();
-        homePage.waitForLoad(driver);
-        homePage.goToSecondWindowOpened();
+        homePage.hoverOnEnterIntoDropdown();
+        homePage.clickGoToOISPageDropdownLink();
 
         assertThat(oisPage.isDisplayed(), is(true));
     }
@@ -73,10 +71,8 @@ public class TalTechHomepageTest {
     public void should_be_able_to_navigate_to_Moodle_page_from_homepage() {
         MoodlePage moodlePage = new MoodlePage(driver);
 
-        homePage.clickGoToMoodlePageDropdownLink();  //OPENS WRONG LINK ON PAGE
-        driver.navigate().refresh();
-        homePage.waitForLoad(driver);
-        homePage.goToSecondWindowOpened();
+        homePage.hoverOnEnterIntoDropdown();
+        homePage.clickGoToMoodlePageDropdownLink();
 
         assertThat(moodlePage.isDisplayed(), is(true));
     }
@@ -85,10 +81,8 @@ public class TalTechHomepageTest {
     public void should_be_able_to_navigate_to_Intranet_page_from_homepage() {
         IntranetPage intranetPage = new IntranetPage(driver);
 
-        homePage.clickGoToIntranetPageDropdownLink();  //OPENS WRONG LINK ON PAGE
-        driver.navigate().refresh();
-        homePage.waitForLoad(driver);
-        homePage.goToSecondWindowOpened();
+        homePage.hoverOnEnterIntoDropdown();
+        homePage.clickGoToIntranetPageDropdownLink();
 
         assertThat(intranetPage.isDisplayed(), is(true));
     }

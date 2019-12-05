@@ -8,23 +8,18 @@ import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
 import gm.taltech.ee.weatherwise.payload.dto.CoordinatesDto;
-import gm.taltech.ee.weatherwise.payload.dto.ForecastDto;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
-import org.apache.commons.lang3.NotImplementedException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hamcrest.core.IsNull;
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -124,7 +119,7 @@ public class WeatherApiTest {
         coordinates.setLon(lon);
 
         CurrentWeatherResponse currentWeatherData = weatherApi.getCurrentWeatherDataForCity(city, units);
-        assertEquals(currentWeatherData.getCoord(), coordinates);
+        assertThat(currentWeatherData.getCoord(), is(coordinates));
     }
 
     @Test
@@ -163,10 +158,8 @@ public class WeatherApiTest {
     }
 
     private WeatherReport read_json_from_file(String city) throws IOException {
-        WeatherReport weatherReport = mapper.readValue(new File(
+        return mapper.readValue(new File(
                         "../course-project/src/main/java/gm/taltech/ee/weatherwise/files/" + city + ".json"),
                 WeatherReport.class);
-
-        return weatherReport;
     }
 }
