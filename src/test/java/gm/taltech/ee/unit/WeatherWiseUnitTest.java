@@ -1,18 +1,25 @@
 package gm.taltech.ee.unit;
 
 import com.sun.jersey.api.client.ClientResponse;
+import gm.taltech.ee.weatherwise.ForecastReport;
 import gm.taltech.ee.weatherwise.WeatherReport;
+import gm.taltech.ee.weatherwise.WeatherReportDetails;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
 import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
 import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
+import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
 import org.apache.commons.lang3.NotImplementedException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hamcrest.core.IsNull;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -86,17 +93,39 @@ public class WeatherWiseUnitTest {
 
     @Test
     public void should_set_weatherReport_coordinates() {
+        String city = "Toulouse";
+        String units = "metric";
+        String expectedCoordinates = "43.6,1.44";
 
+        WeatherReportDetails weatherReportDetails = new WeatherReportDetails();
+        CurrentWeatherResponse currentWeatherData = weatherApi.getCurrentWeatherDataForCity(city, units);
+
+        weatherWise.setWeatherReportCoordinates(weatherReportDetails,currentWeatherData);
+
+        assertThat(weatherReportDetails.getCoordinates(), is(expectedCoordinates));
     }
 
     @Test
     public void should_set_weatherReport_temperatureUnits() {
+        String units = "metric";
+        String expectedTemperatureUnits = "Celsius";
 
+        WeatherReportDetails weatherReportDetails = new WeatherReportDetails();
+        weatherWise.setWeatherReportTemperatureUnits(weatherReportDetails, units);
+
+        assertThat(weatherReportDetails.getTemperatureUnit(), is(expectedTemperatureUnits));
     }
 
     @Test
-    public void should_set_forecasts_to_forecastReport() {
+    public void should_set_forecasts_to_forecastReport() throws IOException {
+        String city = "Barcelona";
+        String units = String.valueOf((Object) null);
 
+        ForecastReport forecastReport = new ForecastReport();
+        WeatherForecastResponse weatherForecastData = weatherApi.getWeatherForecastDataForCity(city, units);
+
+        weatherWise.setForecastsToForecastReport(weatherForecastData, forecastReport);
+        assertThat(forecastReport.getForecasts(), is(IsNull.notNullValue()));
     }
 
     @Test(expected = CityIsEmptyException.class)
