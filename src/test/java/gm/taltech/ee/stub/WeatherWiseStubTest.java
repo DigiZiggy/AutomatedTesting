@@ -1,12 +1,10 @@
 package gm.taltech.ee.stub;
 
-import com.sun.jersey.api.client.ClientResponse;
 import gm.taltech.ee.weatherwise.WeatherReport;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
 import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
-import gm.taltech.ee.weatherwise.payload.dto.CoordinatesDto;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import org.junit.Before;
 import org.junit.Test;

@@ -9,29 +9,24 @@ import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
 import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import org.apache.commons.lang3.NotImplementedException;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import static org.junit.Assert.assertEquals;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.OK;
 
 public class WeatherWiseUnitTest {
 
-    private WeatherWise weatherWise;
-    private WeatherApi weatherApi;
-    private Helper helper;
+    public WeatherWise weatherWise;
+    public WeatherApi weatherApi;
+    public Helper helper;
 
 
     @Before
@@ -70,14 +65,19 @@ public class WeatherWiseUnitTest {
     }
 
     @Test
-    public void should_convert_and_write_weatherReport_into_json() throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException {
+    public void should_convert_and_write_weatherReport_into_json()
+            throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException, JSONException {
         String city = "Berlin";
         String units = String.valueOf((Object) null);
 
         WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
 
         weatherWise.saveWeatherReportIntoJsonFile(weatherReport);
-        throw new NotImplementedException("Test not implemented!");
 
+        System.out.println(weatherReport.toString());
+        String actual = "{id:123, name:\"John\", zip:\"33025\"}";
+        JSONAssert.assertEquals(
+                "{id:123,name:\"John\"}", actual, JSONCompareMode.LENIENT);
+        throw new NotImplementedException("Test not implemented!");
     }
 }

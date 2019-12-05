@@ -1,144 +1,106 @@
-# Projekt - 70p
-**Punktide jaotus:** 
-- Projekti kood - 60p
-- Projekti kaitsmine - 10p
+# Automated testing: course project
 
-**Tähtaeg:**
-- 14. nädala lõpp (hiljemalt _pühapäev 23:59_ on tehtud viimane push masterisse)
+This project is written in order to practise different types of testing technologies and tools to execute these. Project consists of the application described below and the following test suites: integration tests, mock and stub tests, unit tests.
 
-**Meeskond:**
-- Projekt võib teha **üksi või kahekesi**
+We're testing an application that is able to read city names from a file and return a separate file that offers the following:
 
-**Tehnoloogia:**
-- Projekti programmeerimiskeel ja raamistikud on **vabalt valida**.
+- current temperature
+- daily averages for 3 days of weather forecast: temperature, humidity, and barometric pressure. NB! current day is not counted for, so the forecast starts from tomorrow
+- coordinates in the form lat, lon, eg "59.44,24.75"
+- temperature units in Celsius
+
+Also, Selenium UI tests are added, in order to test TalTech Universitys' homepage functionalities.
+
+## Getting Started
+
+For development purposes the recommended IDEA to use: IntelliJ
 
 
+### Prerequisites
 
-## Rakenduse kirjeldus
-Kirjuta rakendus, mis loeb sisse failist linnade nimed ja tagastab eraldi faili:
-- hetke temperatuur
-- 3 päeva ilmaennustusest leida iga päeva kohta keskmised: temp, niiskus ja õhurõhk. **NB!** jooksvat päeva ei ole vaja arvestada, ehk ennustust on vaja homse, ülehomse ja üleülehomse kohta.
-- Koordinaadid kujul lat,lon, nt "59.44,24.75"
-- Temperatuuri ühikuks võtke Celsius
-- Kasutage nt OpenWeatherMap API-sid (vt allpool 2. etapi juures olev link)
+* The latest version of the [Java 11 OpenJDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* Import POM dependencies
+* [Chrome Browser](https://www.google.com/chrome/) - UI Selenium tests are run with [ChromeDriver](https://chromedriver.chromium.org)
+* [Maven](https://maven.apache.org/install.html) 
 
-Näide väljundfailist:
-```json
-{
-  "weatherReportDetails": {
-    "city": "Tallinn",
-    "coordinates": "59.44,24.75",
-    "temperatureUnit": "Celsius"
-  },
-  "currentWeatherReport": {
-    "temperature": -5,
-    "humidity": 75,
-    "pressure": 985
-  },
-  "forecastReport": [
-    {
-      "date": "2019-10-01",
-      "weather": {
-        "temperature": -5,
-        "humidity": 75,
-        "pressure": 985
-      }   
-    },
-    {
-      "date": "2019-10-02",
-      "weather": {
-        "temperature": -5,
-        "humidity": 75,
-        "pressure": 985
-      }   
-    },
-    {
-      "date": "2019-10-03",
-      "weather": {
-        "temperature": -5,
-        "humidity": 75,
-        "pressure": 985
-      }   
-    }   
-  ]   
-}
+
+### Installing
+
+In order to run tests you will need to install [Apache Maven](https://maven.apache.org/install.html) 
+
+For example install Maven with *brew* on Mac OS
+
+```
+brew install maven
 ```
 
 
-## Etapid
-### 1. Mõtle välja kõikvõimalikud testid, mis on vajalikud, et katta projekti nõudmised (jätke I/O testid (failist lugemine, faili kirjutamine) hetkel välja, need võtke ette 3. etapis) **(10p)**
-- Hindan eeskätt testide väärtuslikkust ja testide kompositsiooni, kõik testid ei pea olema implementeeritud (võite panna @Ignore)
-- Clean Code, Edge cases, C.O.R.R.E.C.T
-- **NB!** Sellel etapil võib sisendit (linn) olla hardcode-itud või parameetriga edasi antav, ei pea failist lugema
-- **NB!** Sellel etapil vastus ei pea salvestuma faili, piisab kui returnitakse nt objekt vajaliku infoga
+## Running all the tests
 
-Näited test case-idest:
+To run all the test from command line, make sure you're in *course-project* directory where you can see POM file.
 
-**üldine**
-- tundmatu linna puhul tagastab veateate
-- tagastatakse õige linna koordinaadid
-- Koordinaadid kujul lat,lon, nt "59.44,24.75"
+Run tests with maven and clean test target folder after.
 
-**hetke temperatuur**
-- linn on kohustuslik element päringus
-- tagastatakse õige linna hetke ilm
-- celsiuses küsides, tagastab celsiuses
+```
+mvn test clean
+```
 
-**3-päeva ilmaennustus**
-- linn on kohustuslik element päringus
-- tagastatakse 3 päeva ilmaennustus
-- tagastatakse mitte vanem kui 3h vana ilmaennustus
+### Running integration tests
 
-### 2. Implementeerida programmikood, et testid läheksid läbi, vajadusel kirjuta uusi teste **(10p)**
-- Kasuta [OpenWeatherMap API-sid](https://openweathermap.org/api), et saada praegune temperatuur ja 3 päeva temperatuur (min/max).
-- Kasuta endale meelepärane linn
+Tests to validate that the OpenWeatherMap API integration is acting as intended.
+For example the current weather request returns an HTTP Status Code 200, for the wrong (not recognized) city, the API returns an error with an error message.
 
-### 3. Funktsionaalsuse täiendused: Lisada failist lugemise ja failisse kirjutamine **(15p)**
-- Tee linn parametriseeritavaks
-- Linnad (võib olla mitu) lugeda sisse failist _input.txt_ (võib olla ka JSON, Excel vms, valige ise, mis formaati kasutate)
-- väljund kirjutada faili nt _{linna_nimi}.txt_ (võib olla ka JSON, Excel vms, valige ise, mis formaati kasutate)
-- täienda teste + refactor
+```
+mvn clean test -Dtest=WeatherApiTest
+```
 
-### 4. Mock testid välise API jaoks **(5p)**
-- Lisa testid, mis mockivad OpenWeatherMap API sõltuvused
-- Lisa testid, mis mockivad failist lugemise ja kirjutamise
-- Piisab, kui on üks stub ja üks mock
-- Need testid peavad töötama ka siis kui võrguühendus puudub või kui faili füüsiliselt ei ole
+### Running mock tests
 
-### 5. Kirjuta integratsiooni testid OpenWeatherMap liidestuse valideerimiseks **10p**
+Mock and test OpenWeatherMap API dependencies and read from / write to file functionality
 
-**Testide näiteid OpenWeatherMap-iga:**
-- hetke ilma päring tagastab HTTP Status Code 200 
-- vale (mitte tuvastatud) linna puhul tagastab API viga koos veateatega
-- forecast-i response-is on olemas temperatuuri (või niiskuse, õhurõhu) andmed 
+```
+mvn clean test -Dtest=WeatherApiMockTest
+```
 
-### 6. Kirjuta automaattestid kasutajaliidese testimiseks (UI testid) kasutades TalTechi kodulehte:**(10p)**
-- Valideerige, kas Tudengi sektsioonis Õppeinfo alt räägitakse "Kvaliteetsest haridusest"
-- Valideerige, et minu email töötaja otsingus on german.mumma@taltech.ee
-- Valideerige, et valides üleval *Sisene* sektsioonist ÕIS, Moodle või Siseveeb suunatakse õigesse kohta (piisab URL-i kontrollist).
+## Running stub tests
 
-**Arvestage järgnevaga:**
-- Kasutage Page Object Pattern
-- Proovige kasutada erinevaid selectorite tüüpe (id, css, xpath)
-- Piisab, kui jookseb Chrome-is
 
-## Hindamisel jälgin, et oleks olemas järgmised punktid
-- Vähemalt 3 unit testi, millest vähemalt 1 testib rakenduse poolt Exceptioni viskamist
-- Vähemalt 3 integratsiooni testi (ei ole mockitud, kasutavad päris API-t).
-- 2 mockitud testi, millest vähemalt 1 on stub ja 1 on mock
-- Vähemalt 3 UI testi
-- Kood on versioneeritud (Git) ja commitides jälgitud Git häid praktikaid
-- Sõltuvusute haldamiseks on kasutatud vastavad vahendid (Maven, Gradle, NPM, NuGet vms)
-- Implementeeritud mingit sorti jälgitavust, nt Logimine: request on logitud maha, response on logitud maha, vms.
-- Kui test feilib, siis peaks olema selge, miks ta feilis ja kus ta feilis (sisend, väljund, tegelik vs oodatud, class, rida, screenshot, video vms)
-- Projektil peab olema README, milles on välja toodud: üldine testimise strateegia ja lähenemine, kuidas rakendus käivitada (vajadusel paigaldusjuhend) ja kuidas erinevad testid käivitada ja näha tulemust
-- Kood esitada Clean Code nõuetele vastavalt
+```
+mvn clean test -Dtest=WeatherWiseStubTest
+```
 
-## Q & A
-_Siia tulevad tüüpilised küsimused ja vastused, segadused ja selgitused, kui neid tekib.._
-- Failist lugemise ja faili kirjutamise kohta ei pea tegema ainult mock teste, vaid peavad olema ka testid, mis testivad integratsiooni päris komponentidega.
-- Etappidel eraldi pole tähtaegu, esitate kõik korraga.
-- Esitada võib ka varem, siis saan vihjeid anda, mis kohad vajaksid täiendamist.
-- Rakendus võib töötada ka nt eraldi Program klassi main meetodis. St ei pea olema _fully functioning_ app. **Rõhk on ikkagi testidel ja nende abiga puhta ning modulaarse rakenduse koodi arendamisel**
-- Sõltuvus konkreetsest versioonist on asi, mida tuua välja README-s. Nt "Requires Java 11 or later"
-- Teeme rohkem ja läbi mõeldud committe. Vältige commite, mis "lisab kõik testid ja rakenduse ning README". Mida rohkem committe, seda lihtsam on "ajas tagasi hüpata" ja teha muudatusi, mis ei mõjutaks kogu rakendust.
+## Running UI tests
+
+Automated tests for user TalTech homepage interface testing
+
+```
+mvn clean test -Dtest=TalTechHomepageTest
+```
+
+## Running Unit tests
+
+
+```
+mvn clean test -Dtest=WeatherWiseUnitTest
+```
+
+
+## Built With
+
+* [Java](https://docs.oracle.com/en/java/) - The development language used
+* [Maven](https://maven.apache.org/) - Dependency Management
+* [Selenium](https://selenium.dev) - Used for automating web applications for testing purposes
+* [JUnit](https://junit.org/junit4/) - Framework to write repeatable tests
+
+## Authors
+
+* **Sigrid Narep** 
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* German Mumma - the lead of the course

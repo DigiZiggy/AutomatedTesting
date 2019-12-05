@@ -1,7 +1,6 @@
 package gm.taltech.ee.integration;
 
 import com.sun.jersey.api.client.ClientResponse;
-import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
 import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
@@ -11,7 +10,6 @@ import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.io.IOException;
 import java.util.List;
