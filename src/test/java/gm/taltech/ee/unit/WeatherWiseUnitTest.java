@@ -72,7 +72,7 @@ public class WeatherWiseUnitTest {
 
     @Test
     public void should_create_json_file_for_given_city()
-            throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException, JSONException {
+            throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException {
         String city = "Berlin";
         String units = String.valueOf((Object) null);
 
@@ -82,5 +82,28 @@ public class WeatherWiseUnitTest {
         File file = new File("../course-project/src/main/java/gm/taltech/ee/weatherwise/files/" +
                 city + ".json");
         assertTrue(file.exists());
+    }
+
+    @Test
+    public void should_set_weatherReport_coordinates() {
+
+    }
+
+    @Test
+    public void should_set_weatherReport_temperatureUnits() {
+
+    }
+
+    @Test
+    public void should_set_forecasts_to_forecastReport() {
+
+    }
+
+    @Test(expected = CityIsEmptyException.class)
+    public void  should_throw_cityIsEmptyException_when_city_missing() throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException {
+        String city = "";
+        String units = String.valueOf((Object) null);
+
+        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
     }
 }

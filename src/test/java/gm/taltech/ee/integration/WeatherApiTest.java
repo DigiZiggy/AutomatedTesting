@@ -13,6 +13,7 @@ import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
 import org.apache.commons.lang3.NotImplementedException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hamcrest.core.IsNull;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,7 +62,7 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void get_current_weather_returns_200() throws IOException {
+    public void get_current_weather_returns_200() {
         String city = "Helsinki";
         String units = String.valueOf((Object) null);
 
@@ -70,7 +71,7 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void get_weather_forecast_returns_200() throws IOException {
+    public void get_weather_forecast_returns_200() {
         String city = "London";
         String units = String.valueOf((Object) null);
 
@@ -112,7 +113,7 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void should_return_correct_coordinates_for_the_city() throws IOException {
+    public void should_return_correct_coordinates_for_the_city() {
         String city = "Berlin";
         String units = String.valueOf((Object) null);
         CoordinatesDto coordinates = new CoordinatesDto();
@@ -127,7 +128,8 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void should_return_coordinates_in_correct_form() throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException {
+    public void should_return_coordinates_in_correct_form()
+            throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException {
         String city = "Paris";
         String units = String.valueOf((Object) null);
         String coordinates = "48.86,2.35";
@@ -139,43 +141,25 @@ public class WeatherApiTest {
 
     @Test
     public void should_save_weatherReport_to_json_for_given_city()
-            throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException, JSONException {
-        String city = "Berlin";
+            throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException {
+        String city = "Vienna";
         String units = String.valueOf((Object) null);
 
         WeatherReport actualWeatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
         weatherWise.saveWeatherReportIntoJsonFile(actualWeatherReport, city);
 
         WeatherReport savedWeatherReport = read_json_from_file(city);
-
         assertEquals(savedWeatherReport, actualWeatherReport);
     }
 
     @Test
-    public void should_return_forecast_with_temperature_data() throws IOException {
-        // forecast-i response-is on olemas temperatuuri (või niiskuse, õhurõhu) andmed
+    public void should_return_current_weather_with_temperature_data() {
         String city = "Rome";
         String units = String.valueOf((Object) null);
 
-        WeatherForecastResponse weatherForecastData = weatherApi.getWeatherForecastDataForCity(city, units);
-        List<ForecastDto> forecast = weatherForecastData.getList();
+        CurrentWeatherResponse currentWeatherData = weatherApi.getCurrentWeatherDataForCity(city, units);
 
-        System.out.println(weatherForecastData.getList());
-        throw new NotImplementedException("Test not implemented!");
-    }
-
-    @Test
-    public void should_return_forecast_that_is_not_older_than_3hours() throws IOException {
-        //     tagastatakse mitte vanem kui 3h vana ilmaennustus
-        String city = "Lisbon";
-        String units = String.valueOf((Object) null);
-
-        WeatherForecastResponse weatherForecastData = weatherApi.getWeatherForecastDataForCity(city, units);
-
-        List<ForecastDto> forecast = weatherForecastData.getList();
-
-        System.out.println(forecast);
-        throw new NotImplementedException("Test not implemented!");
+        assertThat(currentWeatherData.getMain().getTemp(), is(IsNull.notNullValue()));
     }
 
     private WeatherReport read_json_from_file(String city) throws IOException {
