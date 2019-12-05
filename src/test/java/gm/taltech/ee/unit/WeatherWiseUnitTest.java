@@ -9,13 +9,17 @@ import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
 import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import org.apache.commons.lang3.NotImplementedException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,9 +28,10 @@ import java.util.List;
 
 public class WeatherWiseUnitTest {
 
-    public WeatherWise weatherWise;
-    public WeatherApi weatherApi;
-    public Helper helper;
+    private WeatherWise weatherWise;
+    private WeatherApi weatherApi;
+    private Helper helper;
+    private ObjectMapper mapper;
 
 
     @Before
@@ -34,6 +39,7 @@ public class WeatherWiseUnitTest {
         weatherApi = new WeatherApi();
         weatherWise = new WeatherWise(weatherApi);
         helper = new Helper();
+        mapper = new ObjectMapper();
     }
 
     @Test
@@ -65,19 +71,16 @@ public class WeatherWiseUnitTest {
     }
 
     @Test
-    public void should_convert_and_write_weatherReport_into_json()
+    public void should_create_json_file_for_given_city()
             throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException, JSONException {
         String city = "Berlin";
         String units = String.valueOf((Object) null);
 
-        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        WeatherReport actualWeatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        weatherWise.saveWeatherReportIntoJsonFile(actualWeatherReport, city);
 
-        weatherWise.saveWeatherReportIntoJsonFile(weatherReport);
-
-        System.out.println(weatherReport.toString());
-        String actual = "{id:123, name:\"John\", zip:\"33025\"}";
-        JSONAssert.assertEquals(
-                "{id:123,name:\"John\"}", actual, JSONCompareMode.LENIENT);
-        throw new NotImplementedException("Test not implemented!");
+        File file = new File("../course-project/src/main/java/gm/taltech/ee/weatherwise/files/" +
+                city + ".json");
+        assertTrue(file.exists());
     }
 }

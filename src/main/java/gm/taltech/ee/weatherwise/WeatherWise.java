@@ -91,13 +91,13 @@ public class WeatherWise {
         }
     }
 
-    public void saveWeatherReportIntoJsonFile(WeatherReport weatherReport) {
+    public void saveWeatherReportIntoJsonFile(WeatherReport weatherReport, String city) {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             //Object to JSON in file
             mapper.writeValue(new File("../course-project/src/main/java/gm/taltech/ee/weatherwise/files/" +
-                    "weatherReport.json"), weatherReport);
+                    city + ".json"), weatherReport);
 
             //Object to JSON in String
             String jsonInString = mapper.writeValueAsString(weatherReport);

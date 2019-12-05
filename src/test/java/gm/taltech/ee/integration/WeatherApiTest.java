@@ -1,16 +1,23 @@
 package gm.taltech.ee.integration;
 
 import com.sun.jersey.api.client.ClientResponse;
+import gm.taltech.ee.weatherwise.WeatherReport;
+import gm.taltech.ee.weatherwise.exception.CityIsEmptyException;
+import gm.taltech.ee.weatherwise.exception.CurrentWeatherDataMissingException;
 import gm.taltech.ee.weatherwise.helpers.Helper;
 import gm.taltech.ee.weatherwise.WeatherWise;
 import gm.taltech.ee.weatherwise.api.WeatherApi;
+import gm.taltech.ee.weatherwise.payload.dto.CoordinatesDto;
 import gm.taltech.ee.weatherwise.payload.dto.ForecastDto;
 import gm.taltech.ee.weatherwise.payload.response.CurrentWeatherResponse;
 import gm.taltech.ee.weatherwise.payload.response.WeatherForecastResponse;
 import org.apache.commons.lang3.NotImplementedException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,6 +33,7 @@ public class WeatherApiTest {
     private WeatherWise weatherWise;
     private WeatherApi weatherApi;
     private Helper helper;
+    private ObjectMapper mapper;
 
 
     @Before
@@ -33,6 +41,7 @@ public class WeatherApiTest {
         weatherApi = new WeatherApi();
         weatherWise = new WeatherWise(weatherApi);
         helper = new Helper();
+        mapper = new ObjectMapper();
     }
 
     @Test
@@ -103,21 +112,43 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void should_return_forecast_that_is_not_older_than_3hours() {
-        //     tagastatakse mitte vanem kui 3h vana ilmaennustus
-        throw new NotImplementedException("Test not implemented!");
+    public void should_return_correct_coordinates_for_the_city() throws IOException {
+        String city = "Berlin";
+        String units = String.valueOf((Object) null);
+        CoordinatesDto coordinates = new CoordinatesDto();
+
+        Double lat = 52.52;
+        Double lon = 13.39;
+        coordinates.setLat(lat);
+        coordinates.setLon(lon);
+
+        CurrentWeatherResponse currentWeatherData = weatherApi.getCurrentWeatherDataForCity(city, units);
+        assertEquals(currentWeatherData.getCoord(), coordinates);
     }
 
     @Test
-    public void should_return_correct_coordinates_for_the_city() {
-        //    tagastatakse õige linna koordinaadid
-        throw new NotImplementedException("Test not implemented!");
+    public void should_return_coordinates_in_correct_form() throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException {
+        String city = "Paris";
+        String units = String.valueOf((Object) null);
+        String coordinates = "48.86,2.35";
+
+        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+
+        assertEquals(weatherReport.getWeatherReportDetails().getCoordinates() ,coordinates);
     }
 
     @Test
-    public void should_return_coordinates_in_correct_form() {
-        //     Koordinaadid kujul lat,lon, nt "59.44,24.75"
-        throw new NotImplementedException("Test not implemented!");
+    public void should_save_weatherReport_to_json_for_given_city()
+            throws CurrentWeatherDataMissingException, CityIsEmptyException, IOException, JSONException {
+        String city = "Berlin";
+        String units = String.valueOf((Object) null);
+
+        WeatherReport actualWeatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        weatherWise.saveWeatherReportIntoJsonFile(actualWeatherReport, city);
+
+        WeatherReport savedWeatherReport = read_json_from_file(city);
+
+        assertEquals(savedWeatherReport, actualWeatherReport);
     }
 
     @Test
@@ -131,5 +162,27 @@ public class WeatherApiTest {
 
         System.out.println(weatherForecastData.getList());
         throw new NotImplementedException("Test not implemented!");
+    }
+
+    @Test
+    public void should_return_forecast_that_is_not_older_than_3hours() throws IOException {
+        //     tagastatakse mitte vanem kui 3h vana ilmaennustus
+        String city = "Lisbon";
+        String units = String.valueOf((Object) null);
+
+        WeatherForecastResponse weatherForecastData = weatherApi.getWeatherForecastDataForCity(city, units);
+
+        List<ForecastDto> forecast = weatherForecastData.getList();
+
+        System.out.println(forecast);
+        throw new NotImplementedException("Test not implemented!");
+    }
+
+    private WeatherReport read_json_from_file(String city) throws IOException {
+        WeatherReport weatherReport = mapper.readValue(new File(
+                        "../course-project/src/main/java/gm/taltech/ee/weatherwise/files/" + city + ".json"),
+                WeatherReport.class);
+
+        return weatherReport;
     }
 }
