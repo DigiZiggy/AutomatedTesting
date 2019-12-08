@@ -33,13 +33,7 @@ public class WeatherApi {
         return getCurrentWeatherClientResponse(cityName, units).getEntity(CurrentWeatherResponse.class);
     }
 
-    public WeatherForecastResponse getWeatherForecastDataForCity(String cityName, String units) throws IOException {
-//        ClientResponse response = getWeatherForecastClientResponse(cityName, units);
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        String json = response.getEntity(String.class);
-//
-//        return mapper.readValue(json, WeatherForecastResponse.class);
+    public WeatherForecastResponse getWeatherForecastDataForCity(String cityName, String units) {
         return getWeatherForecastClientResponse(cityName, units).getEntity(WeatherForecastResponse.class);
     }
 

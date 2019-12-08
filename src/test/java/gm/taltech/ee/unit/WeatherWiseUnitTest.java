@@ -70,7 +70,7 @@ public class WeatherWiseUnitTest {
         String city = "Berlin";
         String units = String.valueOf((Object) null);
 
-        WeatherReport actualWeatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        WeatherReport actualWeatherReport = weatherWise.getWeatherReportForCityInUnits(city, units);
         weatherWise.saveWeatherReportIntoJsonFile(actualWeatherReport, city);
 
         File file = new File("../course-project/src/main/java/gm/taltech/ee/weatherwise/files/" +
@@ -98,13 +98,13 @@ public class WeatherWiseUnitTest {
         String expectedTemperatureUnits = "Celsius";
 
         WeatherReportDetails weatherReportDetails = new WeatherReportDetails();
-        weatherWise.setWeatherReportTemperatureUnits(weatherReportDetails, units);
+        weatherWise.setWeatherReportDetailsTemperatureUnits(weatherReportDetails, units);
 
         assertThat(weatherReportDetails.getTemperatureUnit(), is(expectedTemperatureUnits));
     }
 
     @Test
-    public void should_set_forecasts_to_forecastReport() throws IOException {
+    public void should_set_forecasts_to_forecastReport() {
         String city = "Barcelona";
         String units = String.valueOf((Object) null);
 
@@ -120,6 +120,6 @@ public class WeatherWiseUnitTest {
         String city = "";
         String units = String.valueOf((Object) null);
 
-        weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        weatherWise.getWeatherReportForCityInUnits(city, units);
     }
 }

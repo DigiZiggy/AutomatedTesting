@@ -75,7 +75,7 @@ public class WeatherApiTest {
     }
 
     @Test
-    public void should_return_5_days_forecast_data_for_city() throws IOException {
+    public void should_return_5_days_forecast_data_for_city() {
         String city = "Barcelona";
         String units = String.valueOf((Object) null);
 
@@ -129,7 +129,7 @@ public class WeatherApiTest {
         String units = String.valueOf((Object) null);
         String coordinates = "48.86,2.35";
 
-        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInUnits(city, units);
 
         assertEquals(weatherReport.getWeatherReportDetails().getCoordinates() ,coordinates);
     }
@@ -140,7 +140,7 @@ public class WeatherApiTest {
         String city = "Vienna";
         String units = String.valueOf((Object) null);
 
-        WeatherReport actualWeatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        WeatherReport actualWeatherReport = weatherWise.getWeatherReportForCityInUnits(city, units);
         weatherWise.saveWeatherReportIntoJsonFile(actualWeatherReport, city);
 
         WeatherReport savedWeatherReport = read_json_from_file(city);

@@ -11,7 +11,7 @@ public class SearchEmployeePage {
     private WebDriver driver;
     private By inputNameField = By.cssSelector("input[name='q']:nth-of-type(1)");
     private By submitButton = By.xpath("//input[@type='submit']");
-    private By emailDisplayed = By.xpath("/html/body/div[4]/div/table/tbody/tr[3]/td[2]/a");
+    private By employeeDetailsTable = By.className("pt");
 
     public SearchEmployeePage(WebDriver driver) {
         this.driver = driver;
@@ -25,7 +25,7 @@ public class SearchEmployeePage {
     }
 
     public boolean isCorrectEmailDisplayed() {
-        return driver.findElement(emailDisplayed).getText().equals("german.mumma@taltech.ee");
+        return driver.findElement(employeeDetailsTable).findElement(By.linkText("german.mumma@taltech.ee")).isDisplayed();
     }
 
     public void clickSubmit() {

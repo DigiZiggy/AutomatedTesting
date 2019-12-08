@@ -18,11 +18,6 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class WeatherApiMockTest {
 
-    /**
-     * Compared to stub test, now we are focusing on HOW WeatherApi is called and not the actual data it provides.
-     * In other words now we are interested in testing the interactions (or integration) between two classes.
-     */
-
     @Mock
     WeatherApi weatherApiMock;
 
@@ -33,11 +28,10 @@ public class WeatherApiMockTest {
         weatherWise = new WeatherWise(weatherApiMock);
     }
 
-    // Example of mocking 1: verifying that no interaction took place
     @Test
     public void should_not_call_api_when_city_is_empty() throws CurrentWeatherDataMissingException {
         try {
-            weatherWise.getWeatherReportForCityInCertainUnits(null, null);
+            weatherWise.getWeatherReportForCityInUnits(null, null);
         } catch (CityIsEmptyException | IOException e) {
             // ignored
         }
@@ -45,7 +39,6 @@ public class WeatherApiMockTest {
         verifyZeroInteractions(weatherApiMock);
     }
 
-    // Example of mocking 2: verifying exactly one interaction took place
     @Test
     public void should_call_api_when_city_name_is_provided() throws CurrentWeatherDataMissingException {
         String city = "Tallinn";
@@ -55,7 +48,7 @@ public class WeatherApiMockTest {
                 .thenReturn(mock(CurrentWeatherResponse.class));
 
         try {
-            weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+            weatherWise.getWeatherReportForCityInUnits(city, units);
         } catch (CityIsEmptyException | IOException e) {
             // ignored
         }

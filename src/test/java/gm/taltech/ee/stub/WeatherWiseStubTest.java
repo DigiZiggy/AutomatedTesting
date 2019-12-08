@@ -36,17 +36,11 @@ public class WeatherWiseStubTest {
         String city = "Tallinn";
 
         CurrentWeatherResponse currentWeatherData = new CurrentWeatherResponse();
-
         currentWeatherData.setName(city);
 
-        // When we ask the api for current weather data using some string then always return the same data
-        // In other words we forget about the logic of WeatherApi and focus on WeatherWise and what it should do
-        // with the data the WeatherApi provides.
         Mockito.when(weatherApiMock.getCurrentWeatherDataForCity(anyString(), anyString())).thenReturn(currentWeatherData);
+        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInUnits(city, String.valueOf((Object) null));
 
-        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, String.valueOf((Object) null));
-
-        System.out.println(weatherReport.toString());
         assertEquals(weatherReport.getWeatherReportDetails().getCity(), city);
     }
 
@@ -56,12 +50,10 @@ public class WeatherWiseStubTest {
         String units = "imperial";
 
         CurrentWeatherResponse currentWeatherData = new CurrentWeatherResponse();
-
         currentWeatherData.setName(city);
 
         Mockito.when(weatherApiMock.getCurrentWeatherDataForCity(anyString(), anyString())).thenReturn(currentWeatherData);
-
-        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInUnits(city, units);
 
         assertEquals(weatherReport.getWeatherReportDetails().getTemperatureUnit(), "Fahrenheit");
     }
@@ -72,12 +64,10 @@ public class WeatherWiseStubTest {
         String units = "metric";
 
         CurrentWeatherResponse currentWeatherData = new CurrentWeatherResponse();
-
         currentWeatherData.setName(city);
 
         Mockito.when(weatherApiMock.getCurrentWeatherDataForCity(anyString(), anyString())).thenReturn(currentWeatherData);
-
-        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInUnits(city, units);
 
         assertEquals(weatherReport.getWeatherReportDetails().getTemperatureUnit(), "Celsius");
     }
@@ -88,12 +78,10 @@ public class WeatherWiseStubTest {
         String units = String.valueOf((Object) null);
 
         CurrentWeatherResponse currentWeatherData = new CurrentWeatherResponse();
-
         currentWeatherData.setName(city);
 
         Mockito.when(weatherApiMock.getCurrentWeatherDataForCity(anyString(), anyString())).thenReturn(currentWeatherData);
-
-        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInCertainUnits(city, units);
+        WeatherReport weatherReport = weatherWise.getWeatherReportForCityInUnits(city, units);
 
         assertEquals(weatherReport.getWeatherReportDetails().getTemperatureUnit(), "Kelvin");
     }
